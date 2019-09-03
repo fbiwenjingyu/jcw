@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.BIRHZXMapper">
+
+	<!-- 数据使用情况统计 -->
+	<select id="selectForRHZXDZJZ" resultType="java.util.Map" >
+		select ss.`name`,count(al.ID) as `count` from  bus_bi_rhzx_structure ss
+		LEFT join audit_log al
+		on al.QUERY_TYPE=ss.FROM and structure='dzzj'
+		GROUP BY ss.`name`
+	</select>
+
+	<!-- 各市委办局数据被使用情况 -->
+	<select id="selectForRHZXSJSL" resultType="java.util.Map" >
+		select SUM(al.DATA_USAGE) as useCount , count(*) as frequencyCount from
+		bus_bi_rhzx_structure ss  join audit_log al
+		on al.QUERY_TYPE=ss.`from` and structure='dzzj'
+	</select>
+
+	<!--融合中心委办局统计 -->
+	<select id="selectForRHZXWBJ" resultType="java.util.Map">
+		select bl.`name` as library, IFNULL(br.frequency_count,0) as frequencyCount,
+		IFNULL(br.use_count,0) as useCount from bus_library bl
+				left join y_view_bus_bi_rhzx_data br
+				on  bl.id=br.library
+	</select>
+
+</mapper>

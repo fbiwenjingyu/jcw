@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.MobileDeviceMapper">
+
+	<resultMap id="BaseResultMap" type="com.ovit.jcw.model.MobileDevice" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="device_name" property="deviceName" jdbcType="VARCHAR" />
+		<result column="login_user" property="loginUser" jdbcType="VARCHAR" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="bind" property="bind" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		id,device_name,login_user,imei,serial_number,`position`,status,bind,create_time,update_time
+	</sql>
+
+	<select id="query" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select *
+		FROM mobile_device
+		WHERE 1=1
+		<if test="deviceName != null and deviceName != ''">
+			AND device_name like CONCAT('%',#{deviceName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="loginUser != null and loginUser != ''">
+			AND login_user like CONCAT('%',#{loginUser,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="(startTime != null and startTime != '') and (endTime != null and endTime != '') ">
+			AND create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="opt == 1">
+			AND to_days(create_time) = to_days(now())
+		</if>
+		<if test="opt == 2">
+			AND TO_DAYS(NOW()) - TO_DAYS(create_time) = 1
+		</if>
+		<if test="opt == 4">
+			AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt; date(create_time)
+		</if>
+		<if test="opt == 5">
+			AND DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt; date(create_time)
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	<select id="queryMap" resultType="java.util.Map" parameterType="java.util.Map">
+		select  id,device_name as deviceName,
+		login_user as loginUser,imei,
+		serial_number as serialNumber,`position`,status,bind,
+		create_time as createTime,update_time as updateTime
+		FROM mobile_device
+		WHERE 1=1
+		<if test="deviceName != null and deviceName != ''">
+			AND device_name like CONCAT('%',#{deviceName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="loginUser != null and loginUser != ''">
+			AND login_user like CONCAT('%',#{loginUser,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="(startTime != null and startTime != '') and (endTime != null and endTime != '') ">
+			AND create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="opt == 1">
+			AND to_days(create_time) = to_days(now())
+		</if>
+		<if test="opt == 2">
+			AND TO_DAYS(NOW()) - TO_DAYS(create_time) = 1
+		</if>
+		<if test="opt == 4">
+			AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt; date(create_time)
+		</if>
+		<if test="opt == 5">
+			AND DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt; date(create_time)
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	<select id="selectCountByIMEI" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(*) FROM mobile_device WHERE imei = #{imei,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectCountByIMEIAndUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT count(*) FROM mobile_device WHERE imei = #{imei,jdbcType=VARCHAR} AND login_user = #{loginUser,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectStatusByIMEI" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT status FROM mobile_device WHERE imei = #{imei,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectDeviceName" resultType="java.lang.String">
+		SELECT device_name FROM mobile_device
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ovit.jcw.model.MobileDevice" >
+		insert into mobile_device (device_name,imei,serial_number)
+		values (#{deviceName},#{imei},#{serialNumber})
+	</insert>
+
+	<insert id="insertObject" parameterType="map">
+		INSERT INTO mobile_device (device_name,imei,serial_number)
+		values (#{deviceName},#{imei},#{serialNumber})
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+		delete from mobile_device
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateStatusByIMEI" parameterType="com.ovit.jcw.model.MobileDevice" >
+		update mobile_device
+		set
+		status = #{status,jdbcType=INTEGER},
+		update_time = now()
+		where imei = #{imei,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateBindByIMEI" parameterType="com.ovit.jcw.model.MobileDevice" >
+		update mobile_device
+		set
+		login_user = #{loginUser,jdbcType=VARCHAR},
+		bind = #{bind,jdbcType=INTEGER},
+		update_time = now()
+		where imei = #{imei,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updatePositionByIMEI" parameterType="java.util.Map" >
+		update mobile_device
+		set
+		`position` = #{position,jdbcType=VARCHAR},
+		update_time = now()
+		where imei = #{imei,jdbcType=VARCHAR}
+	</update>
+
+</mapper>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.BusMapper">
+
+	<select id="queryLibrary" resultType="java.lang.String" >
+		SELECT l.`name` FROM  bus_library l  where l.`type`=0
+	</select>
+	<!-- 查找该类型下的表-->
+	<select id="queryInfoByTable" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT t.id,l.id as library_id,l.library,t.`name` FROM  bus_table t join bus_library l on t.library=l.id
+          where t.`table`= #{table} and   t.isenable=1 and l.isenable=1
+	</select>
+	<!-- 查询所有基本base-->
+	<select id="queryBaseConfig" resultType="java.util.Map">
+		SELECT * FROM  bus_table_config_base
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryByConfigTag" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT * FROM  y_view_bus_table_config  where create_tag = #{tag}
+	</select>
+	<!-- 查找该类型下的表-->
+	<select id="queryByCreateTag" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT * FROM  y_view_bus_table_create  where create_tag = #{tag}
+	</select>
+
+
+	<!-- 查找该类型下的表-->
+	<select id="queryEXByType" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT * FROM  y_view_bus_table_create  where ex_type = #{tag}
+	</select>
+	<!-- 查找该类型下的表-->
+	<select id="queryByLibrary" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT * FROM  y_view_bus_table_create  where tag = #{tag}
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryFiledByTable" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT field,`name`,`size`,important,`show`,`sign` FROM  bus_table_field   where `table` = #{table}
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryEnglishFiledKeyByTable" resultType="java.util.Map" parameterType="java.lang.String">
+		select k.field,v.`key`,v.`data`,k.remark from bus_table_field_key k left join
+	  bus_table_data_value v on k.sign=v.type   where k.`table` = #{table}
+    </select>
+	<select id="queryChineseFiledKeyByTable" resultType="java.util.Map" parameterType="java.lang.String">
+		select f.`name` as field,v.`key`,v.`data`,k.remark from bus_table_field_key k
+		join bus_table_field f on k.`table`=f.`table` and k.field=f.field
+		left join  bus_table_data_value v on k.sign=v.type   where k.`table` = #{table}
+    </select>
+	<!-- 查找该类型下的表-->
+	<select id="queryEnglishSecretFiledByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT field FROM  bus_table_field where `table` = #{table} and secret = 1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryChineseSecretFiledByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT `name` FROM  bus_table_field where `table` = #{table} and secret=1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryShowFiledByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT field FROM  bus_table_field where `table` = #{table} and `show` = 1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="querySignFiledByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT field FROM  bus_table_field where `table` = #{table} and `sign` = 1
+	</select>
+
+	<!-- 根据表名查询身份证字段对应的中文字段-->
+	<select id="querySignNameByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT `name` FROM  bus_table_field where `table` = #{table} and `sign` = 1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="querySpecialFiledByTable" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT field FROM  bus_table_field where `table` = #{table} and `special` = 1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryUserSecretByTable" resultType="java.lang.String" parameterType="java.util.Map">
+		SELECT `condition` FROM  bus_table_secret where `table` = #{table} and `user`= #{user} and isenable=1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryUserSecretByUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT count(flag) as `count` FROM  bus_table_secret where `user`= #{user} and `condition` = #{condition} and flag > 0 and isenable=1
+	</select>
+
+	<!-- 查找该类型下的表-->
+	<select id="queryUserSecretByLibrary" resultType="java.lang.String" parameterType="java.util.Map">
+		SELECT la.`condition` FROM bus_library l join bus_library_authority la
+			on l.library=la.library where l.`name` = #{library} and la.`user`= #{user} and la.isenable=1
+	</select>
+
+	<!-- 根据卡号信息查找是有红名单-->
+	<select id="queryRedList" resultType="java.lang.String">
+		SELECT `card` FROM  bus_red_list where  isenable=1
+	</select>
+
+	<!-- 根据卡号信息查找是有红名单-->
+	<select id="queryRedListByUser" resultType="java.lang.String" parameterType="java.util.Map">
+	  SELECT b.`card` FROM  bus_red_authority a join bus_red_list b
+ 		on a.sign=b.sign  where  b.isenable=1 and a.isenable=1  and a.`user`= #{user}
+  </select>
+
+	<!-- 根据查询条件和用户查询可见的表 -->
+	<select id="queryUserSecretByCondition" resultType="java.lang.String" parameterType="java.util.Map">
+	  SELECT `table` FROM bus_table_secret where `condition` like CONCAT('%',#{condition,jdbcType=VARCHAR},'%') and `user`= #{user} and isenable = 1
+	</select>
+
+	<!-- 根据查询条件和用户查询可见的表 -->
+	<select id="queryUserSecretByConditionForExact" resultType="java.lang.String" parameterType="java.util.Map">
+		SELECT `table` FROM bus_table_secret where `condition` = #{condition,jdbcType=VARCHAR} and `user`= #{user} and isenable = 1
+</select>
+
+	<!-- 查询所有表数量 -->
+	<select id="selectAllTables" resultType="java.lang.Integer">
+      SELECT count(*) from bus_table where isenable = 1
+    </select>
+
+	<!-- 根据表名查询出需要查询的字段 -->
+	<select id="selectFieldByTable" resultType="java.lang.String" parameterType="java.lang.Integer">
+		select field from bus_association_library where `type` = #{type} and is_enable = 1
+	</select>
+
+	<!-- 根据表名查询出数据库名 -->
+	<select id="selectLibraryByTable" resultType="java.lang.String" parameterType="java.lang.Integer">
+		select db_user from bus_association_library where `type` = #{type} and is_enable = 1 limit 1
+	</select>
+
+	<!-- 根据表名查询出数据库名 -->
+	<select id="selectRelationshipContrast" resultType="java.util.Map" >
+		select * from bus_relationship_contrast where  isenable = 1
+	</select>
+	<!-- 根据表名查询出数据库名 -->
+	<select id="selectRelationshipContrastInfo" resultType="java.util.Map" parameterType="java.lang.Integer">
+		select * from bus_relationship_contrast_info where `type` = #{type} and isenable = 1
+	</select>
+	<select id="selectFieldByTag" resultType="java.util.Map" parameterType="java.lang.Integer">
+		select * from bus_correlation_table where tag = #{tag} and is_enable = 1
+	</select>
+
+	<insert id="insert" parameterType="java.util.Map" >
+		insert into bus_table_secret (`table`,`user`,flag,`condition`)
+		values (#{table}, #{user}, #{flag}, #{condition})
+	</insert>
+
+
+</mapper>

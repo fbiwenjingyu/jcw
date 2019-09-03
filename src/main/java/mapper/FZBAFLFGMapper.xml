@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.FZBAFLFGMapper">
+
+	<insert id="InsertObject" parameterType="map">
+		INSERT INTO FZBA.FLFG (BT,LB,FBDW,WH,FBRQ,YXX,FL,ZW)
+		values
+		(
+		#{bt},
+		#{ss},
+		#{fbdw},
+		#{wh},
+		#{fbrq},
+		#{yxx},
+		#{fl},
+		#{zw})
+	</insert>
+	<!-- 法律法规-->
+	<select id="query" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT *
+		FROM FZBA.V_FLFG where 1=1
+		<if test="lb != null and lb!= ''">
+			AND  LB=#{lb,jdbcType=VARCHAR}
+		</if>
+		<if test="info != null and info!= ''">
+			AND
+			(BT like
+			CONCAT('%',#{info,jdbcType=VARCHAR},'%')
+			OR FBDW like
+			CONCAT('%',#{info,jdbcType=VARCHAR},'%')
+			)
+		</if>
+	</select>
+	<!-- 法律法规-->
+	<select id="queryAll" resultType="java.util.Map" >
+		SELECT * FROM FZBA.V_FZBA
+
+	</select>
+
+	<select id="queryJQ" resultType="java.util.Map" >
+		SELECT * FROM FZBA.V_FZBA_J
+   </select>
+
+	<select id="select" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT ID,LB,BT,FBDW,WH,FBRQ,YXX,FL,ADDDATE FROM FZBA.FLFG where ID = #{id}
+	</select>
+
+	<select id="selectZW" resultType="java.lang.String" parameterType="java.lang.Integer">
+		SELECT ZW FROM FZBA.FLFG where ID = #{id}
+	</select>
+
+	<select id="selectCount" resultType="java.lang.Integer" >
+		SELECT count(*) FROM FZBA.FLFG
+	</select>
+	<select id="selectTodayCount" resultType="java.lang.Integer" >
+		select count(*) from FZBA.FLFG where to_days(ADDDATE) = to_days(now())
+	</select>
+</mapper>

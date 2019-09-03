@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.DZDAJBXXMapper">
+	<!-- 根据身份证号查找基本信息-->
+	<select id="queryUserByIDNumber" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM GABY.JBXX_QGRKXX  where SFZH = #{idNumber}
+	</select>
+
+	<select id="queryUser" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT IFNULL(SFZH,'null') as SFZH,IFNULL(XB,'null') as XB,IFNULL(HJD,'null') as HJD,IFNULL(CSRQ,'null') as CSRQ,IFNULL(CYM,'null') as CYM,IFNULL(CSD,'null') as CSD,IFNULL(SG,'null') as SG,IFNULL(CSDGJ,'null') as CSDGJ,IFNULL(JGGJ,'null') as JGGJ,IFNULL(BYZK,'null') as BYZK,IFNULL(XS,'null') as XS,IFNULL(HYZK,'null') as HYZK,IFNULL(BJMC,'null') as BJMC,IFNULL(XM,'null') as XM,IFNULL(MZ,'null') as MZ,IFNULL(HJDJDZ,'null') as HJDJDZ,IFNULL(SJGSDW,'null') as SJGSDW,IFNULL(NL,'null') as NL,IFNULL(JG,'null') as JG,IFNULL(ZY,'null') as ZY,IFNULL(CSDXZ,'null') as CSDXZ,IFNULL(FWCS,'null') as FWCS,IFNULL(WHCD,'null') as WHCD,IFNULL(SSSJDW,'null') as SSSJDW,IFNULL(XMPY,'null') as XMPY
+		FROM GABY.JBXX_QGRKXX  where SFZH = #{idNumber}
+	</select>
+
+</mapper>

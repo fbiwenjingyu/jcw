@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.SpecialLibraryMapper">
+
+    <!-- 工程招投标库查询 -->
+	<select id="selectForProjectTender" resultType="java.util.Map" parameterType="java.lang.String">
+		select * from CJW.NEWBIINFO where CONCAT(IFNULL(IITEMPROJECTID,''),IFNULL(IITEMPROJECTNAME,''),IFNULL(IITEMPROJECTADD,'')) like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 法律法规库查询 -->
+	<select id="selectForLawsAndRegulations" resultType="java.util.Map" parameterType="java.util.Map">
+	  select * from FZBA.FLFG where LB = #{type} AND CONCAT(IFNULL(BT,''),IFNULL(FBDW,''),IFNULL(FL,''),IFNULL(ZW,'')) like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 案例库查询 -->
+	<select id="selectForCaseLibrary" resultType="java.util.Map" parameterType="java.util.Map">
+	  select * from FZBA.ZFAL where LB = #{type} AND CONCAT(IFNULL(BT,''),IFNULL(FBDW,''),IFNULL(FL,''),IFNULL(ZW,'')) like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 档案库-基本信息查询 -->
+	<select id="selectForArchiveBaseInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT t.XM,t.GMSFHM,t.XB,t.CSRQ,w.ZWMC,w.ZWCJ,w.JGJC FROM RSJ.ZWY_RYXX_GRJBXX t LEFT JOIN JGBZ.WHSJGRYXX w on t.GMSFHM = w.ZJHM WHERE t.GMSFHM = #{queryCondition}
+	</select>
+
+	<!-- 档案库-婚姻关系查询 -->
+	<select id="queryForArchiveHYXX" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT DISTINCT SFZH,FMNAME,FZJH,MNAME,MZJH,YWLB FROM MZJ.HYDJ WHERE SFZH = #{queryCondition}
+	</select>
+
+	<!-- 档案库-子女信息查询-->
+	<select id="queryArchiveZNXX" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT SFZH,XSEXM,XSEXBDM FROM WJW.CSYXZM_JBXX WHERE SFZH = #{idNumber}
+	</select>
+
+	<!-- 驾驶证关联违章信息库查询 -->
+	<select id="selectForVehicleViolationLibrary" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT JDCSYR,SFZH,CPHM from GABY.JCXX_QGJDC where CONCAT(IFNULL(JDCSYR,''),IFNULL(SFZH,''),IFNULL(CPHM,'')) like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 驾驶证关联违章信息库详情查询 -->
+	<select id="selectForVehicleViolationLibraryDetail" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT SFZH,XM,XB,HPHM,WFSJ,WFDD from GABY.BJXX_QGJDCWZXX where HPHM = #{queryCondition}
+	</select>
+
+</mapper>

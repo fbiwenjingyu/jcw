@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.FLTJBQMapper">
+
+    <!--标签查询-->
+	<select id="findAll" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT * FROM y_view_bus_classify_tag WHERE TAG = #{tag}
+	</select>
+
+    <!--查询所有一级标签-->
+    <select id="findAllFirstTags" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT * FROM y_view_bus_classify_tag WHERE BQJB = '0' AND FBQID = '0' AND TAG = #{tag}
+    </select>
+
+    <!--查询相应级别下的标签-->
+    <select id="findTagsByBQID" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT * FROM y_view_bus_classify_tag WHERE BQJB = #{BQJB} AND TAG = #{tag}
+    </select>
+
+    <!--查询相应级别下的标签-->
+    <select id="findTagByTable" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT tag FROM bus_classify_tag WHERE `type` = #{type} AND `level`= #{level} AND tag_table = #{table}
+    </select>
+
+</mapper>

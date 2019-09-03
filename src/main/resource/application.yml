@@ -1,0 +1,107 @@
+server:
+    port: 8081
+    tomcat:
+        uri-encoding: UTF-8
+
+oracle:
+    owner: AJJ,CJW,FGJ,FGW,GHJ,MZJ,ORACLE_ES,RSJ,SFJ,SMZJ,SFJWAN,SXFJ,SYJJ,SZZB,TXXX,XSHRK,YHXX,ZJJ,JGBZ
+    tableType: TABLE
+
+es:
+    library: 基础库,标准库,关联库,专题库
+
+gaby:
+    path: /data/photo/imagelib/
+    url: ./imagelib/
+
+config:
+    path: /opt/jcw/config/
+
+word:
+    path: /opt/jcw-gateway-api/wordSavePath
+
+encrypt: '***'
+
+encryptField: desc_pretty,pk_col_data,pk_col_name,db_user,db_nick_name,table_name,table_nick_name
+
+#跨域设置
+http:
+    domain: http://192.168.2.32
+
+
+hadoop:
+    hdfs:
+        uri: hdfs://10.1.2.20:8020
+        user: hdfs
+
+spring:
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 50MB
+            max-request-size: 50MB
+    http:
+        encoding:
+            charset:  UTF-8
+            enabled:  true
+            force:    true
+
+    messages:
+        encoding: UTF-8
+
+    elasticsearch:
+        #esHost: 127.0.0.1
+        esHost: 10.1.2.28
+        esPort: 9300
+        esClusterName: elasticsearch
+        indexName: oracle_es_v3
+        type: all_part
+
+    datasource:
+        mysql1:
+            driver-class-name: com.mysql.jdbc.Driver
+            jdbc-url : jdbc:mysql://10.1.2.6:3306/MZJ?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false&serverTimezone=GMT
+            username: admin
+            password: Jcw1235^
+            connectontimeout: 30
+
+        mysql:
+            driver-class-name: com.mysql.jdbc.Driver
+            jdbc-url: jdbc:mysql://10.1.2.6:3306/jcw_data?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false
+            username: admin
+            password: Jcw1235^
+            connectontimeout: 30
+            tableMapping: bus_table_column_mapping
+
+    mybatis:
+        # 如果是放在src/main/java目录下 classpath:mapper/*Mapper.xml
+        mapper-locations: classpath*:/*mapper/*.xml
+        #实体扫描，多个package用逗号或者分号分隔
+        type-aliases-package: true
+        configuration.default-fetch-size: 100
+        configuration.default-statement-timeout: 300
+
+    pagehelper:
+        #pagehelper
+        helperDialect: mysql
+        reasonable: true
+        supportMethodsArguments: true
+        params: count=countSql
+        # 默认false,当为true时，自动检验适合的数据库
+        auto-dialect: true
+        # 这个一定要加上，不然mysql和oracle分页两个只能用一个，另一个会报错，加上后，两种数据库分页都可以用了
+        auto-runtime-dialect: true
+
+    jedis:
+        # Redis Server Info
+        driver: com.ovit.jcw.common.jedis.JedisProxySingle
+        hosts: 127.0.0.1:6379
+        password: none
+        maxTotal: 5
+        maxIdle: 5
+        minIdle: 3
+        timeout: 5000
+        mode: single
+
+
+

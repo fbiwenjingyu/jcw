@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.CorrelationAnalysisMapper">
+
+	<!-- 关联分析查询-公司名称作为查询条件 -->
+	<select id="selectCompanyByTerm" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT ICONSTRUCTIONUNIT as ICONSTRUCTIONUNIT,1 as `TYPE` from CJW.NEWBIINFO
+		where ICONSTRUCTIONUNIT like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 关联分析查询-项目名称作为条件 -->
+	<select id="selectProjectNameByTerm" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT IITEMPROJECTNAME as IITEMPROJECTNAME,2 as `TYPE` from CJW.NEWBIINFO
+		where IITEMPROJECTNAME like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 关联分析查询-项目地址作为查询条件 -->
+	<select id="selectProjectAddByTerm" resultType="java.util.Map" parameterType="java.lang.String">
+		select DISTINCT IITEMPROJECTADD as IITEMPROJECTADD,3 as `TYPE` from CJW.NEWBIINFO
+		where IITEMPROJECTADD like CONCAT('%',#{queryCondition},'%')
+	</select>
+
+	<!-- 关联分析查询-根据父级查询子级信息(返回的数据类型不是CLOB) -->
+	<select id="selectChildByTermNotClob" resultType="java.util.Map" parameterType="java.util.Map">
+		select DISTINCT ${result_field} as RESULT,#{result_name} as FILED,${type} as `TYPE` from CJW.NEWBIINFO
+		where ${query_field} = #{queryCondition}
+	</select>
+
+</mapper>
