@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JcwApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JcwApplication.class, args);
+
 	}
 
 }
