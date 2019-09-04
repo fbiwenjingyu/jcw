@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class BaseController
 {
     private Logger logger;
-    @Autowired
+    @Autowired(required = false)
     private SystemConfigMapper systemConfigMapper;
     @Autowired
     private MobileDeviceService mobileDeviceService;

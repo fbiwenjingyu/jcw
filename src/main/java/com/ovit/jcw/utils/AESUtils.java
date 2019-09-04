@@ -14,7 +14,8 @@ public class AESUtils {
 	private static final String ALGORITHMSTR = "AES/ECB/PKCS5Padding";
 
 	public static void main(String[] args) throws Exception {
-		String content = "wanglu@51bsi.com";
+		//String content = "wanglu@51bsi.com";//2019-9-4
+		String content ="6216f8a75fd5bb3d5f22b6f9958cdede3fc086c2";
 		System.out.println("加密前：" + content);
 
 		System.out.println("加密密?和解密密?：n49ujGhCdxNeYFTYUEoxBxNKZjMH0Gaj");

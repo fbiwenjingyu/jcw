@@ -60,14 +60,14 @@ spring:
     datasource:
         mysql1:
             driver-class-name: com.mysql.jdbc.Driver
-            jdbc-url : jdbc:mysql://10.1.2.6:3306/MZJ?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false&serverTimezone=GMT
+            jdbc-url : jdbc:mysql://10.1.2.28:3306/MZJ?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false&serverTimezone=GMT
             username: admin
             password: Jcw1235^
             connectontimeout: 30
 
         mysql:
             driver-class-name: com.mysql.jdbc.Driver
-            jdbc-url: jdbc:mysql://10.1.2.6:3306/jcw_data?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false
+            jdbc-url: jdbc:mysql://10.1.2.28:3306/jcw_data?characterEncoding=utf8&useSSL=true&verifyServerCertificate=false
             username: admin
             password: Jcw1235^
             connectontimeout: 30
@@ -95,7 +95,7 @@ spring:
     jedis:
         # Redis Server Info
         driver: com.ovit.jcw.common.jedis.JedisProxySingle
-        hosts: 127.0.0.1:6379
+        hosts: 10.1.2.28:6379
         password: none
         maxTotal: 5
         maxIdle: 5

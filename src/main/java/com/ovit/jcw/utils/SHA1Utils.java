@@ -22,4 +22,9 @@ public class SHA1Utils {
 		}
 		return null;
 	}
+
+	public static void main(String[] args) {
+		String password = "123456";
+		System.out.println(getSha1(password));
+	}
 }
