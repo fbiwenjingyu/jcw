@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.MysqlQueryMapper">
+
+	<!--查询表字段对应的中文描述-->
+	<select id="selectTableColumnMapping" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from ${tableMapping} where table_name = #{tableName}
+	</select>
+
+	<!--查询出所有涉及人员信息的表-->
+	<select id="selectTableWithUserInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from bus_double_name_statistics WHERE ISENABLE = 1
+	</select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mysqlmapper.SystemRuleMapper" >
+  <resultMap id="BaseResultMap" type="com.ovit.jcw.model.SystemRule" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
+    <result column="PID" property="pid" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="TreeResultMap" type="com.ovit.jcw.model.SystemRule" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
+    <result column="PID" property="pid" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <collection property="child" column="id" select="selectByParent"></collection>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ID,TITLE,`NAME`,URL,`LEVEL`,PID,STATUS,CREATE_TIME
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="map" >
+    insert into system_rule (TITLE,`NAME`,URL,`LEVEL`,PID)
+    values (#{title,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},
+      #{level,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER})
+  </insert>
+
+  <select id="selectAllRule" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from system_rule
+    where  ID  in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="queryAll" resultMap="TreeResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_rule
+    where PID = 100000
+    AND STATUS = 1
+  </select>
+
+  <select id="selectByParent" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from system_rule
+    where PID = #{id,jdbcType=INTEGER}
+    AND STATUS = 1
+  </select>
+
+  <select id="selectUserRoleRule"  resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select DISTINCT rule_id from t_view_user_role_rule
+    where login_name =  #{loginName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select t.*
+    from system_rule t
+    JOIN role_rule r ON r.RULE_ID = t.ID
+    where r.ROLE_ID = #{id,jdbcType=INTEGER}
+    AND t.STATUS = 1
+  </select>
+</mapper>
