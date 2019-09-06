@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.SDXHDMapper">
+
+	<!-- 根据卡号查找-->
+	<select id="QueryByCard" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM oracle_es.DZDA_SHQYGX_DXHD  where PSFZH = #{card}
+	</select>
+
+	<select id="selectCountsAndDH" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT count(*) as counts,MDDZ FROM (SELECT DISTINCT * FROM oracle_es.DZDA_SHQYGX_DXHD)
+		WHERE PSFZH = #{idNumber} GROUP BY MDDZ ORDER BY counts DESC
+	</select>
+
+	<select id="selectDetail" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT DISTINCT * FROM oracle_es.DZDA_SHQYGX_DXHD WHERE PSFZH = #{idNumber} and MDDZ = #{DX}
+	</select>
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.BJGMapper">
+
+
+	<!-- 创建-->
+	<update id="createTable" parameterType="java.util.Map">
+		create table  ${bq}.${table} (
+		`ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
+		<foreach collection="map"  item="fields" separator=",">
+			`${fields.field}` ${fields.size}
+		</foreach>
+		,`ADDDATE` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+		,PRIMARY KEY (`ID`) USING BTREE
+		)
+	</update>
+
+	<!-- 根据表名删除数据-->
+	<delete id="deleteByTable"  parameterType="java.util.Map">
+		delete from  ${bq}.${table}
+	</delete>
+
+
+	<!-- 根据表名查询数据-->
+	<select id="queryByTableInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT * FROM ${bq}.${table} where 1=1
+		<if test="fieldInfo!=null ">
+			and (
+			<foreach collection="fieldInfo"   item="fieldvalue" separator="or">
+				(${fieldvalue} LIKE CONCAT('%', #{info},'%'))
+			</foreach>
+			)
+
+		</if>
+	</select>
+
+	<!-- 根据表名查询数据-->
+	<select id="queryBaisicByInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+		<if test="map.out_filed != null">
+			${map.out_filed} as OUTFILED ,
+		</if>
+		${map.inlet_filed} as INLETFILED  FROM ${table} where ${key}=#{value}
+	</select>
+	<!-- 根据表名查询数据-->
+	<select id="queryNormalByTableInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT * FROM ${bq}.${table} where 1=1
+		<if test="info!= null ">
+			and CONCAT(
+			<foreach collection="fieldInfo"   item="fieldvalue" separator=" , ">
+				IFNULL(${fieldvalue},'')
+			</foreach>
+			)
+			 LIKE CONCAT('%',#{info},'%')
+		</if>
+	</select>
+
+
+	<!-- 创建，带注释-->
+	<update id="createOracleTable" parameterType="java.util.Map">
+		create table ${bq}.${table} (
+		<foreach collection="map1" index="field" item="fieldvalue" separator=",">
+			${field}  ${fieldvalue}
+		</foreach>
+		,ADDDATE DATE DEFAULT SYSDATE
+		)
+		<!--
+		<foreach collection="map2" index="field" item="fieldvalue" separator=";">
+			comment  ON column  ${bq}.${table}.${field} IS  #{fieldvalue}
+		</foreach>
+		-->
+	</update>
+
+
+	<!-- 根据表名和身份证插入数据-->
+	<insert id="insertOracleData" parameterType="java.util.Map">
+		insert into ${bq}.${table}
+		<foreach collection="map.keys" separator="," item="key" open="(" close=")">
+			${key}
+		</foreach>
+		values
+		<foreach collection="map.keys" item="key" separator="," open="(" close=")">
+			#{map[${key}]}
+		</foreach>
+	</insert>
+
+	<!-- 根据表名和身份证插入数据-->
+	<insert id="insertOracleList" parameterType="java.util.Map" useGeneratedKeys="false">
+		insert into ${bq}.${table}
+		<foreach collection="list.get(0).keys" separator="," item="key" open="(" close=")">
+			${key}
+		</foreach>
+		<foreach item="item" index="index" collection="list" separator="union all">
+			(
+			SELECT
+			<foreach collection="item.keys" item="key" separator="," open="(" close=")">
+				#{item[${key}]}
+			</foreach>
+			FROM DUAL
+			)
+		</foreach>
+	</insert>
+
+
+
+
+</mapper>

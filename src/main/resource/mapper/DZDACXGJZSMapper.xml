@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.DZDACXGJZSMapper">
+
+	<!-- 根据身份证号查找住宿信息-->
+	<select id="queryUserByIDNumberForStay" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM oracle_es.DZDA_ZS  where PSFZH = #{idNumber}
+	</select>
+
+	<!-- 查出过滤重复之后的数据-->
+	<select id="selectZsCounts" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT count(*) as counts,LGMC FROM (SELECT DISTINCT * FROM DZDA_ZS) WHERE PSFZH = #{idNumber} GROUP BY LGMC
+	</select>
+
+	<select id="selectDetail" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT DISTINCT * FROM oracle_es.DZDA_ZS WHERE LGMC = #{LGMC} and PSFZH = #{idNumber}
+	</select>
+
+	<!-- 根据身份证号查找最新住宿入住时间-->
+	<select id="selectLastDate" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT RZSJ FROM GABY.HDXX_LGZSXX WHERE SFZH = #{idNumber} ORDER BY RZSJ DESC LIMIT 1
+	</select>
+
+	<!-- 根据身份证号查找最新住宿数据-->
+	<select id="selectLastData" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM GABY.HDXX_LGZSXX WHERE SFZH = #{idNumber} ORDER BY RZSJ DESC LIMIT 1
+	</select>
+
+	<!-- 根据身份证号查找住宿记录-->
+	<select id="queryByIdNumber" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select COUNT(*) FROM GABY.HDXX_LGZSXX where SFZH = #{idNumber} AND DATE_SUB(#{lastDate}, INTERVAL #{day} DAY) &lt;= date(RZSJ)
+	</select>
+
+</mapper>

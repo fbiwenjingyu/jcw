@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.QGMHLGMapper">
+	<!-- 根据卡号查找-->
+	<select id="QueryByCard" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM oracle_es.DZDA_CXGJ_QGMHLG  where PSFZH = #{card}
+	</select>
+
+	<!-- 查出过滤重复之后的起始站点数据-->
+	<select id="selectSite" resultType="java.util.Map">
+		SELECT DISTINCT QFGZ,DDGZ FROM GABY.HDXX_QGMHLG_X where SFZH = #{idNumber}
+	</select>
+
+	<!-- 根据起始站点查出去同一个地方的次数-->
+	<select id="selectCounts" resultType="java.lang.Long" parameterType="java.util.Map">
+		SELECT COUNT(*) FROM GABY.HDXX_QGMHLG_X WHERE QFGZ = #{QFGZ} and DDGZ = #{DDGZ} and SFZH = #{idNumber}
+	</select>
+
+	<select id="selectDetail" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT DISTINCT * FROM DZDA_CXGJ_QGMHLG WHERE QFGZ = #{QS} and DDGZ = #{ZD} and PSFZH = #{idNumber}
+	</select>
+
+	<!-- 根据身份证号查找最新航班离港时间-->
+	<select id="selectLastDate" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT LGSJ FROM GABY.HDXX_QGMHLG_X WHERE SFZH = #{idNumber} ORDER BY LGSJ DESC LIMIT 1
+	</select>
+
+	<!-- 根据身份证号查找最新航班离港数据-->
+	<select id="selectLastData" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM GABY.HDXX_QGMHLG_X WHERE SFZH = #{idNumber} ORDER BY LGSJ DESC LIMIT 1
+	</select>
+
+	<!-- 根据身份证号查找航班记录-->
+	<select id="queryByIdNumber" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select COUNT(*) FROM GABY.HDXX_QGMHLG_X where SFZH = #{idNumber} AND DATE_SUB(#{lastDate}, INTERVAL #{day} DAY) &lt;= date(LGSJ)
+	</select>
+
+	<!-- 活动时序图查询 -->
+	<select id="queryForTimingDiagram" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT QFGZ,DDGZ,LGSJ FROM GABY.HDXX_QGMHLG_X where SFZH = #{idNumber} and LGSJ is not NULL
+	</select>
+
+</mapper>

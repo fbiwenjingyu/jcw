@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.CLQKMapper">
+	<!-- 根据卡号查找-->
+	<select id="queryForCLQK" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM oracle_es.DZDA_CLQK  where PSFZH = #{card}
+	</select>
+
+	<!-- 查询所有车辆下相关人的违章信息-->
+	<select id="queryForWGXX" resultType="java.util.Map">
+		SELECT COUNT(*) as COUNTS,XM,HPHM FROM oracle_es.DZDA_QGJDCWZXX GROUP BY HPHM,XM
+	</select>
+
+	<!-- 根据车牌号查询下面相关人的违法记录-->
+	<select id="queryForWGXXByHPHM" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT COUNT(*) as COUNTS,XM FROM oracle_es.DZDA_QGJDCWZXX WHERE HPHM = #{HPHM} GROUP BY XM
+	</select>
+
+	<!-- 根据根据身份证号查找车牌-->
+	<select id="selectForCPHM" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT DISTINCT CPHM FROM GABY.JCXX_QGJDC  where SFZH = #{idNumber}
+	</select>
+
+	<!-- 根据根据身份证号查找车牌信息-->
+	<select id="queryByIdNumber" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT  DISTINCT * FROM GABY.JCXX_QGJDC  where SFZH = #{idNumber}
+	</select>
+
+</mapper>

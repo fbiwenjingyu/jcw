@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ovit.jcw.mapper.DZDAYHHCXXMapper">
+
+	<!-- 根据身份证号查找银行信息-->
+	<select id="queryUserByIDNumberForBank" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT * FROM ORACLE_ES.DZDA_YHHCXX  where PSFZH = #{idNumber}
+	</select>
+</mapper>
