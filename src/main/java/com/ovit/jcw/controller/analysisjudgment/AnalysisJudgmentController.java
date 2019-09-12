@@ -137,7 +137,7 @@ public class AnalysisJudgmentController extends BaseController {
 			String descPretty = "";
 			try {
 				logger.info("查??件：{}", params);
-				List<Map<String, String>> alist = (List) params.get("cardList");
+					List<Map<String, String>> alist = (List) params.get("cardList");
 
 				Map<String, Object> resultMap = relationshipService.query(alist, 0);
 				logger.info("?据查?成功：{}", resultMap);

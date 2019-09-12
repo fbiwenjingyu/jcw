@@ -18,11 +18,11 @@ import com.alibaba.fastjson.*;
 public class BusServiceImpl implements BusService
 {
     private Logger logger;
-    @Autowired
+    @Autowired(required = false)
     private BJGMapper bjgMapper;
-    @Autowired
+    @Autowired(required = false)
     private BusMapper busMapper;
-    @Autowired
+    @Autowired(required = false)
     private FLTJBQMapper fLTJBQMapper;
     @Autowired
     private AuthorityService authorityService;
@@ -46,11 +46,21 @@ public class BusServiceImpl implements BusService
                     final String library = item.get("library").toString().toUpperCase();
                     final String table = item.get("table").toString();
                     final List<Map<String, Object>> filedList = (List<Map<String, Object>>)this.busMapper.queryFiledByTable(table);
+                    //------------------------盛齐星2019-9-修改
+                    final List<Map<String, Object>> filedList1=new ArrayList();
+                    //------------------------盛齐星2019-9-修改
                     if (filedList != null && filedList.size() > 0) {
+
                         final Map<String, String> map1 = new HashMap<String, String>();
                         final Map<String, String> map2 = new HashMap<String, String>();
                         for (int i = 0; i < filedList.size(); ++i) {
                             final Map<String, Object> map3 = filedList.get(i);
+                            //------------------------盛齐星2019-9-修改
+                            Object sizeValue = map3.get("size");
+                            map3.remove("size");
+                            map3.put("size1",sizeValue);
+                            filedList1.add(map3);
+                            //------------------------盛齐星2019-9-修改
                             if (type == 0) {
                                 map1.put(map3.get("field").toString(), map3.get("size").toString());
                                 map2.put(map3.get("field").toString(), map3.get("name").toString());
@@ -60,7 +70,10 @@ public class BusServiceImpl implements BusService
                             this.bjgMapper.createOracleTable(library, table, (Map)map1, (Map)map2);
                         }
                         else {
-                            this.bjgMapper.createTable(library, table.toLowerCase(), (List)filedList);
+                            //this.bjgMapper.createTable(library, table.toLowerCase(), (List)filedList);
+                            //------------------------盛齐星2019-9-修改
+                            this.bjgMapper.createTable(library, table.toLowerCase(), (List)filedList1);
+                            //------------------------盛齐星2019-9-修改
                         }
                     }
                 }

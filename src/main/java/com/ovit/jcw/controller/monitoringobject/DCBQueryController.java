@@ -230,7 +230,7 @@ public class DCBQueryController extends BaseController
         return result;
     }
     
-    @RequestMapping({ "/exportMultipart" })
+        @RequestMapping({ "/exportMultipart" })
     public Result exportMultipart(final HttpServletRequest request, @RequestParam("file") final MultipartFile[] file, @RequestParam("library") final String library) {
         this.logger.info("调查表-批量导入excel");
         final Result result = new Result();

@@ -8,7 +8,7 @@
 		create table  ${bq}.${table} (
 		`ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
 		<foreach collection="map"  item="fields" separator=",">
-			`${fields.field}` ${fields.size}
+			`${fields.field}` ${fields.size1}
 		</foreach>
 		,`ADDDATE` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 		,PRIMARY KEY (`ID`) USING BTREE

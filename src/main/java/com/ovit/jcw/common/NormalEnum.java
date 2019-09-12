@@ -166,7 +166,7 @@ public class NormalEnum
         FXYPLibrary(8, "分析研判"), 
         FZBFLibrary(9, "辅助办案"), 
         BITJLibrary(10, "BI统计"), 
-        APILibrary(11, "API接口"), 
+        APILibrary(11, "API接口"),
         BusinessInfo(12, "综合查询-企业工商信息"), 
         TenderInfo(13, "综合查询-工程中标信息"), 
         CaseInfo(14, "综合查询-食品药品安全事故信息"), 
@@ -593,7 +593,8 @@ public class NormalEnum
         SecretAuthority(Integer.valueOf(2), "涉密授权"), 
         Red(Integer.valueOf(5), "红名单"), 
         RedAuthority(Integer.valueOf(6), "红名单授权");
-        
+
+
         private Integer code;
         private final String desc;
         
